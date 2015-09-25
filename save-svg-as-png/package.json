@@ -1,0 +1,49 @@
+{
+  "name": "save-svg-as-png",
+  "version": "1.0.0",
+  "description": "Convert a browser SVG to PNG or dataUri",
+  "main": "saveSvgAsPng.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exupero/saveSvgAsPng"
+  },
+  "keywords": [
+    "svg",
+    "png",
+    "graphics",
+    "images"
+  ],
+  "author": {
+    "name": "Eric Shull"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/exupero/saveSvgAsPng/issues"
+  },
+  "homepage": "https://github.com/exupero/saveSvgAsPng",
+  "gitHead": "729bc3d8f478439c7fe30fb860a956fbc9a73391",
+  "_id": "save-svg-as-png@1.0.0",
+  "_shasum": "1f49f953480cb64827f05ef71c218cc60bbb5747",
+  "_from": "save-svg-as-png@*",
+  "_npmVersion": "2.5.1",
+  "_nodeVersion": "0.10.36",
+  "_npmUser": {
+    "name": "exupero",
+    "email": "eric@exupero.org"
+  },
+  "dist": {
+    "shasum": "1f49f953480cb64827f05ef71c218cc60bbb5747",
+    "tarball": "http://registry.npmjs.org/save-svg-as-png/-/save-svg-as-png-1.0.0.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "exupero",
+      "email": "eric@exupero.org"
+    }
+  ],
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/save-svg-as-png/-/save-svg-as-png-1.0.0.tgz"
+}

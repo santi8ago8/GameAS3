@@ -3,6 +3,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import com.lorentz.SVG.display.SVGDocument;
+	import com.lorentz.processing.ProcessExecutor;
 	/**
 	 * ...
 	 * @author santi8ago8
@@ -12,6 +13,7 @@ package
 		
 		public function Main() 
 		{
+			ProcessExecutor.instance.initialize(stage); 
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
@@ -23,7 +25,9 @@ package
 			
 			
 			var svg:SVGDocument = new SVGDocument();  
-			svg.load("lion.svg");  
+			svg.load("../img/lion.svg");  
+			
+			trace(svg.getChildAt(0).num);
 			trace(svg.numChildren);
 			
 			
