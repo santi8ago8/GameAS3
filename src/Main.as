@@ -27,7 +27,7 @@ package
 			var svg:SVGDocument = new SVGDocument();  
 			svg.load("../img/lion.svg");  
 			
-			trace(svg.getChildAt(0).num);
+			trace(svg.getChildAt(0));
 			trace(svg.numChildren);
 			
 			

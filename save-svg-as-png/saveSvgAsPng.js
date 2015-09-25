@@ -127,7 +127,7 @@
     });
   }
 
-  out$.saveSvgAsPng = function(el, name, options) {
+  out$.saveSvgAsPng = function(el, options, cb) {
     options = options || {};
     out$.svgAsDataUri(el, options, function(uri) {
       var image = new Image();
@@ -139,14 +139,8 @@
         var context = canvas.getContext('2d');
         context.drawImage(image, 0, 0);
 
-        var a = document.createElement('a');
-        a.download = name;
-        a.href = canvas.toDataURL('image/png');
-        document.body.appendChild(a);
-        a.addEventListener("click", function(e) {
-          a.parentNode.removeChild(a);
-        });
-        a.click();
+        var content = canvas.toDataURL('image/png');
+		cb(content,canvas);
       }
     });
   }

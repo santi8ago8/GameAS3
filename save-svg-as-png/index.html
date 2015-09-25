@@ -502,18 +502,39 @@
 		draw.removeChild(nodes[i]);
 	}
 	
-	function Call(node){
+	function decodeBase64Image(dataString) {
+	  var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+		response = {};
+
+	  if (matches.length !== 3) {
+		return new Error('Invalid input string');
+	  }
+
+	  response.type = matches[1];
+	  response.data = new Buffer(matches[2], 'base64');
+
+	  return response;
+	}
+
+	var i=0;
+	var fs = require('fs');
+	var Camana = require('../caman.full');
+	function next(){
+		draw.appendChild(nodes[i]);
+		saveSvgAsPng(canvas, {}, function(content,cn){
+			console.log("cotnentt....");
+			debugger;
+			fs.writeFile('res/'+i+".png",decodeBase64Image(content).data,function(err){
+				i++;
+				console.log('writted');
+				next();
+			});
+		});
+		draw.removeChild(nodes[i]);
+	
 		
 	}
-	var i=0;
-	
-		setInterval(function(){
-			draw.appendChild(nodes[i]);
-			saveSvgAsPng(canvas, 'test.png');
-			draw.removeChild(node[i]);
-		
-			i++;
-		},250)
+	next();
 	
 	
 	
