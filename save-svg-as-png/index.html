@@ -516,24 +516,83 @@
 	  return response;
 	}
 
+	
 	var i=0;
 	var fs = require('fs');
-	var Camana = require('../caman.full');
+	var boxes=[];
 	function next(){
-		draw.appendChild(nodes[i]);
-		saveSvgAsPng(canvas, {}, function(content,cn){
-			console.log("cotnentt....");
-			debugger;
-			fs.writeFile('res/'+i+".png",decodeBase64Image(content).data,function(err){
-				i++;
-				console.log('writted');
-				next();
+		if (i==nodes.length){
+			data = {
+				name:'name.figure',
+				description:'description',
+				els:boxes
+			}
+			fs.writeFile('res/data.json',JSON.stringify(data),function(err){
+				console.log('ended write file final.');
 			});
+			return;
+		}
+		draw.appendChild(nodes[i]);
+		saveSvgAsPng(canvas, {}, function(canvas,context){
+			//debugger;
+			var box = getBox(context); //ver donde cambiar el canvas.
+			boxes.push(box);
+			var newCanvas = document.createElement('canvas');
+			newCanvas.width = box.width;
+			newCanvas.height = box.height;
+			context = newCanvas.getContext('2d');
+			context.drawImage(canvas,box.x,box.y,box.width,box.height,0,0,box.width,box.height);
+			
+			
+			var content = newCanvas.toDataURL('image/png');
+			if (content != 'data:,'){
+				fs.writeFile('res/'+i+".png",decodeBase64Image(content).data,function(err){
+					i++;
+					next();
+					console.log('ended');
+				});
+			}else{
+				i++;
+				next();
+				console.log('jump');
+			}
 		});
 		draw.removeChild(nodes[i]);
 	
 		
 	}
+	
+	function getBox(context){
+		var canvas = context.canvas;
+		var x=canvas.width,y=canvas.height,ancho=0, alto=0;
+		
+		var pixels = context.getImageData(0,0,canvas.width,canvas.height).data;
+		var tempX=0,tempY =0; 
+		for	(var i = 0; i<pixels.length;i+=4){
+			
+			
+			var pixel = {r:pixels[i],g:pixels[i+1],b:pixels[i+2],a:pixels[i+3]};
+			if (pixel.r != 0 || pixel.g != 0 || pixel.b != 0 || pixel.a != 0){
+				if (tempX<x)
+					x = tempX;
+				if (tempY<y)
+					y = tempY;
+				if (tempX>ancho)
+					ancho = tempX;
+				if (tempY>alto)
+					alto = tempY;
+			}
+			
+			tempX+=1;
+			
+			if (tempX  == 800){
+				tempY+=1;
+				tempX =0;
+			}
+		}
+		return {x:x,y:y,width:ancho-x+1,height:alto-y+1};
+	}
+	
 	next();
 	
 	

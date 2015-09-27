@@ -139,8 +139,8 @@
         var context = canvas.getContext('2d');
         context.drawImage(image, 0, 0);
 
-        var content = canvas.toDataURL('image/png');
-		cb(content,canvas);
+        
+		cb(canvas,context);
       }
     });
   }
