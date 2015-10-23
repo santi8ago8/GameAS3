@@ -15,14 +15,15 @@ package
 	public class MainTest extends Sprite
 	{
 		
-		public function MainTest()
+		public function MainTest(folder:String)
 		{
+			this.folder = folder;
 			if (stage)
 				init();
 			else
 				addEventListener(Event.ADDED_TO_STAGE, init);
 		}
-		private var folder:String = new String("../img/sports/");
+		private var folder:String;
 		
 		private function init(e:Event = null):void
 		{
@@ -41,6 +42,12 @@ package
 		
 		private function fileLoaded(e:Event):void {
 			var data:Object = JSON.parse((e.target as URLLoader).data);
+			Main.currentJson = data;
+			this.alpha = 0;
+			Tweener.addTween(this, {
+				alpha:1,
+				time:.9
+			});
 			
 			for (var i:int = 0; i < data.els.length; i++)
 			{
@@ -63,28 +70,88 @@ package
 		}
 		
 		private function start(loader:GameLoader):void {
+			
 			Tweener.addTween(loader, {
 					y:loader.box.y, 
 					x:loader.box.x, 
 					time:2 + Math.random() * 2, 
 					transition:'easeInOutCubic' , 
-					delay:2,
-					onComplete: this.exit,
-					onCompleteParams:[loader]
+					delay:1
 					} );
 		}
-		private function exit(loader:GameLoader):void {
-			Tweener.addTween(loader, {
+		
+		public function hide(cb:Function) {
+			
+			
+			
+			for (var i:int = 0; i < this.numChildren; i++)
+			{
+				var loader:GameLoader = this.getChildAt(i) as GameLoader;
+				Tweener.addTween(loader, {
 					y: -800 +Math.random()*2400, 
 					x: -800 + Math.random() * 2400, 
 					time:2 + Math.random() * 2, 
+					transition:'easeInOutCubic'
+					});
+			}
+			
+			Tweener.addTween(this, {
+					alpha:0,
+					time:6, 
 					transition:'easeInOutCubic' , 
-					delay:2,
-					onComplete: this.start,
-					onCompleteParams:[loader]
-					} );
+					onComplete: function() {
+						cb();
+					}
+					});
+			
 		}
-	
+		public function hideFromScene(cb:Function) {
+		
+			
+			
+			for (var i:int = 0; i < this.numChildren; i++)
+			{
+				var loader:GameLoader = this.getChildAt(i) as GameLoader;
+				
+				var x, y:Number;
+				if (i % 2 == 0) {
+					Math.random
+					x = MainTest.randomIntRange( -2700, -800); //r.integer( -2700, -800);
+					y = MainTest.randomIntRange(-800, 1800);
+				} else {
+					x = MainTest.randomIntRange(800, 1600);
+					y = MainTest.randomIntRange(-800, 1800);
+				}
+				Tweener.addTween(loader, {
+					y: y,
+					x: x, 
+					time:2 + Math.random() * 2, 
+					transition:'easeInOutCubic'
+					});
+			}
+			
+			Tweener.addTween(this, {
+					alpha:0,
+					time:6, 
+					transition:'easeInOutCubic' , 
+					onComplete: function() {
+						trace("cb call");
+						cb();
+						
+					}
+					});
+		}
+		public static function randomIntRange(start:Number, end:Number):int
+		{
+			return int(randomNumberRange(start, end));
+		}
+		
+		public static function randomNumberRange(start:Number, end:Number):Number
+		{
+			end++;
+			return Math.floor(start + (Math.random() * (end - start)));
+		}
+
 	}
 
 }

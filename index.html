@@ -1,0 +1,197 @@
+<html>
+
+
+<head>
+    <meta charset="utf-8">
+
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+        body {
+            background-color: black;
+            text-align: center;
+        }
+
+        path, polygon, circle, linearGradient, ellipse, text, linearGradient, rect {
+
+        }
+
+        .relative {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .absolute {
+            position: absolute;
+        }
+
+        .niveles {
+            /*width: 800px;*/
+            top: 470px;
+            left: 0px;
+            right: 0px;
+            text-align: center;
+
+        }
+
+        .game {
+            position: relative;
+            width: 800px;
+            margin: auto;
+        }
+
+        .interfaz {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            opacity: 0;
+            color: white;
+        }
+
+        .images {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            /*overflow: hidden;*/
+        }
+
+        .perspectiveparent {
+            perspective: 1978px;
+            perspective-origin: 50% 128%;
+        }
+
+        .perspective {
+            transform: rotateX(43deg) scaleY(.62) scaleX(.55) translateY(1066px);
+        }
+
+        * {
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .intInner {
+            float: left;
+            clear: both;
+            padding-top: 15px;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        /*
+                position: relative;
+                height: 150px;
+                width: 150px;
+                margin: 50px;
+                padding: 10px;
+                border: 1px solid black;
+                -webkit-perspective: 150px;
+                -webkit-perspective-origin: 10% 10%;
+                perspective: 47px;
+                perspective-origin: 50% 20%;
+
+
+
+        */
+
+        .end {
+            position: absolute;
+            top: 220px;
+            left: 15px;
+            right: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            background-color: rgba(0, 0, 0, .5);
+            z-index: 10;
+        }
+
+        .back {
+            text-align: center;
+            padding-top: 96px;
+        }
+
+        .back img {
+            max-height: 56px;
+            transform: translateX(-290px);
+        }
+
+        .end .frase {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .end .point {
+            font-size: 44px;
+            font-weight: bold;
+            margin: 15px 0px;
+        }
+
+        .interfaz .menuImg {
+            position: relative !important;
+            max-height: 60px;
+        }
+
+        .interfaz img {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .interfaz img.lineas {
+            opacity: 0.55;
+        }
+
+        .interfaz .letra {
+            height: 100px;
+            width: 100px;
+        }
+
+        .level {
+            max-height: 150px;
+            padding: 0px 8px;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app">
+
+</div>
+
+<script type="text/javascript">
+    /*
+     var draw = document.querySelector('#draw');
+
+     var nodesQuery = draw.querySelectorAll('path,polygon,circle,linearGradient,ellipse,text,linearGradient,rect');
+     var nodes = [];
+     for	(var i = 0; i<nodesQuery.length ; i++){
+     nodes.push(nodesQuery[i]);
+     }
+
+     for (var i = 0; i < nodes.length; i++) {
+     var n = nodes[i]
+     var x,y;
+     x = (Math.random()*800)+'px';
+     y = (Math.random()*800)+'px';
+     var s = "translate("+x+','+y+")";
+     n.style.transform=s
+     };
+     setTimeout(function(){
+     for (var i = 0; i < nodes.length; i++) {
+     var n = nodes[i]
+     var x,y;
+     x = (Math.random()*800)+'px';
+     y = (Math.random()*800)+'px';
+     var s = "translate(0px,0px)";
+     n.style.transform=s
+     };
+     },3000);
+
+     */
+</script>
+<script type="text/javascript" src="build.min.js"></script>
+</body>
+</hmtl>

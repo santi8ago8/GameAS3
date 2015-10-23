@@ -8,10 +8,11 @@
     <movie fps="60" />
     <movie width="800" />
     <movie height="800" />
-    <movie version="14" />
+    <movie version="18" />
     <movie minorVersion="0" />
     <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
+    <movie preferredSDK="C:\Users\santi8ago8\flex_sdk_4.6" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -84,7 +85,7 @@
   <postBuildCommand alwaysRun="False" />
   <!-- Other project options -->
   <options>
-    <option showHiddenPaths="False" />
+    <option showHiddenPaths="True" />
     <option testMovie="Default" />
     <option testMovieCommand="" />
   </options>

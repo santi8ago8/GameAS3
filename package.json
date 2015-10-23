@@ -1,5 +1,17 @@
 {
+  "name": "vect",
+  "main": "index.html",
   "dependencies": {
-    "mkdirp": "^0.5.1"
+    "babelify": "^6.3.0",
+    "brfs": "^1.4.1",
+    "compression": "^1.6.0",
+    "express": "^4.13.3",
+    "history": "^1.12.5",
+    "jquery": "^2.1.4",
+    "lodash": "^3.10.1",
+    "mkdirp": "^0.5.1",
+    "random-js": "^1.0.8",
+    "react-addons-transition-group": "^0.14.0",
+    "react-router": "^1.0.0-rc3"
   }
 }
