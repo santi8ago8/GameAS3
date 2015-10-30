@@ -1,4 +1,4 @@
-package 
+﻿package 
 {
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
@@ -28,6 +28,7 @@ package
 		var game:MainTest;
 		var tMenu:Timer;
 		var tGame:Timer;
+		var fraseFinal:String;
 		var I:Interf;
 		
 		public function playLevel1(e:TimerEvent):void {
@@ -46,29 +47,39 @@ package
 			tMenu.start();
 			
 			tGame = new Timer(7000, 1);
-			tGame.addEventListener(TimerEvent.TIMER, playGame);
+			tGame.addEventListener(TimerEvent.TIMER, initInterf);
 			tGame.start();
 		}
 		
-		private function playGame(e:TimerEvent):void {
+		private function initInterf(e:TimerEvent):void {
 			trace(currentJson.description);
 			var I:Interf = new Interf();
-			
+			this.I = I;
 			trace(I);
 			
 			stage.addChild(I);
-			I.init(currentJson.description, currentJson.description.length);
+			I.init(currentJson.description, 0);
 			I.alpha = 0;
 			Tweener.addTween(I, {
 				alpha:1,
 				time:.6
 			});
-			
+			tGame = new Timer(600,1);
+			tGame.addEventListener(TimerEvent.TIMER,this.playGame);
+			tGame.start();
+		}
+		
+		private function playGame(e:TimerEvent):void{
+		
+			this.fraseFinal = game.createLetters();
+			I.init(Main.currentJson.description, this.fraseFinal.length);
+
+
 		}
 			
 		private function hideFromStage(e:Event) {
 			trace("tick hide stage");
-			game.hideFromScene(function() { } );
+			game.hideFromScene(function() { } , false);
 		}
 		
 		private function init(e:Event = null):void {

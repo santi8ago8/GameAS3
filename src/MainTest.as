@@ -4,6 +4,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.display.Loader;
+	import flash.display.MovieClip;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import caurina.transitions.Tweener;
@@ -14,10 +15,12 @@ package
 	 */
 	public class MainTest extends Sprite
 	{
+		var letras:MovieClip;
 		
 		public function MainTest(folder:String)
 		{
 			this.folder = folder;
+			
 			if (stage)
 				init();
 			else
@@ -37,6 +40,8 @@ package
 			
 			var loaderJson:URLLoader = new URLLoader(new URLRequest(folder + 'data.json'));
 			loaderJson.addEventListener(Event.COMPLETE, this.fileLoaded);
+
+
 			
 		}
 		
@@ -63,7 +68,46 @@ package
 				this.start(loader);
 				
 			}
+
+			this.letras = new MovieClip();
+			this.addChild(letras);
 		}
+
+		public function createLetters():String{
+			var frase:String = Main.currentJson.description.toLowerCase()
+				.split(" ").join("")
+				.split(".").join("")
+				.split(",").join("")
+				.split("á").join("a")
+				.split("é").join("e")
+				.split("í").join("i")
+				.split("ó").join("o")
+				.split("ú").join("u");
+
+			var tiempo:Number = Main.currentJson.time;
+			var tiempoCU:Number = tiempo/frase.length;
+
+
+			for (var i = 0;i<frase.length;i++){
+				var l:String = frase.charAt(i);
+				var url:String = 'img/abecedario/' + l + '.png';
+				var loader:GameLoader = new GameLoader();
+				loader.load(new URLRequest(url));
+				letras.addChild(loader);
+				loader.y = -100;
+				loader.x = MainTest.randomIntRange(10,700);
+				Tweener.addTween(loader,{
+					y:650,
+					delay:i*tiempoCU,
+					time:MainTest.randomNumberRange(.5,2),
+					transition:'easeInOutCubic' 
+				});
+			}
+
+
+			return frase;
+		}
+
 		
 		private function complete(child:GameLoader):void {
 			trace(child);
@@ -105,7 +149,7 @@ package
 					});
 			
 		}
-		public function hideFromScene(cb:Function) {
+		public function hideFromScene(cb:Function,alpha:Boolean=true) {
 		
 			
 			
@@ -129,17 +173,13 @@ package
 					transition:'easeInOutCubic'
 					});
 			}
-			
+			cb();
+			if (alpha)
 			Tweener.addTween(this, {
-					alpha:0,
-					time:6, 
-					transition:'easeInOutCubic' , 
-					onComplete: function() {
-						trace("cb call");
-						cb();
-						
-					}
-					});
+				alpha:0,
+				time:6, 
+				transition:'easeInOutCubic' 
+			});
 		}
 		public static function randomIntRange(start:Number, end:Number):int
 		{
@@ -149,7 +189,7 @@ package
 		public static function randomNumberRange(start:Number, end:Number):Number
 		{
 			end++;
-			return Math.floor(start + (Math.random() * (end - start)));
+			return (start + (Math.random() * (end - start)));
 		}
 
 	}
