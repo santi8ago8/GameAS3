@@ -29,7 +29,7 @@
 		var tMenu:Timer;
 		var tGame:Timer;
 		var fraseFinal:String;
-		var I:Interf;
+		public static var I:Interf;
 		
 		public function playLevel1(e:TimerEvent):void {
 			try{
@@ -54,8 +54,8 @@
 		private function initInterf(e:TimerEvent):void {
 			trace(currentJson.description);
 			var I:Interf = new Interf();
-			this.I = I;
-			trace(I);
+			Main.I = I;
+
 			
 			stage.addChild(I);
 			I.init(currentJson.description, 0);
@@ -72,7 +72,7 @@
 		private function playGame(e:TimerEvent):void{
 		
 			this.fraseFinal = game.createLetters();
-			I.init(Main.currentJson.description, this.fraseFinal.length);
+			Main.I.init(Main.currentJson.description, this.fraseFinal.length);
 
 
 		}

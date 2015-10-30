@@ -15,7 +15,13 @@ package
 			
 		}
 		public var box:Object = null;
-		
+		public var tag:Object = new Object();
+
+		public function isVisible():Boolean{
+
+			return (x>0 && this.visible);
+
+		}
 	}
 
 }

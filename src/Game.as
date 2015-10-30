@@ -13,11 +13,13 @@ package
 	 * ...
 	 * @author santi8ago8
 	 */
-	public class MainTest extends Sprite
+	public class Game extends Sprite
 	{
 		var letras:MovieClip;
+		var frase:String;
+		var countGraph:int;
 		
-		public function MainTest(folder:String)
+		public function Game(folder:String)
 		{
 			this.folder = folder;
 			
@@ -53,6 +55,7 @@ package
 				alpha:1,
 				time:.9
 			});
+			this.countGraph = 0;
 			
 			for (var i:int = 0; i < data.els.length; i++)
 			{
@@ -66,6 +69,7 @@ package
 				loader.y = i % 2 == 0? -500:1200;
 				loader.box = box;
 				this.start(loader);
+				this.countGraph++;
 				
 			}
 
@@ -86,28 +90,53 @@ package
 
 			var tiempo:Number = Main.currentJson.time;
 			var tiempoCU:Number = tiempo/frase.length;
-
+			this.frase = frase;
 
 			for (var i = 0;i<frase.length;i++){
 				var l:String = frase.charAt(i);
 				var url:String = 'img/abecedario/' + l + '.png';
 				var loader:GameLoader = new GameLoader();
 				loader.load(new URLRequest(url));
+				loader.tag = new Object();
+				loader.tag.letra = i.toString();
 				letras.addChild(loader);
 				loader.y = -100;
-				loader.x = MainTest.randomIntRange(10,700);
+				loader.x = Game.randomIntRange(10,700);
 				Tweener.addTween(loader,{
 					y:650,
 					delay:i*tiempoCU,
-					time:MainTest.randomNumberRange(.5,2),
-					transition:'easeInOutCubic' 
+					time:Game.randomNumberRange(.5,2),
+					transition:'easeInOutCubic',
+					onComplete:function(l:Loader){
+						l.visible = false;
+					},
+					onCompleteParams:[loader]
 				});
 			}
+
+			this.stage.addEventListener(KeyboardEvent.KEY_DOWN,this.keydown);
 
 
 			return frase;
 		}
 
+		private function keydown(e:KeyboardEvent):void{
+			var letra:String = String.charFromCode(e.keyCode);
+			var count:int=0;
+			for (var i:int = 0; i<this.letras,numChildren; i++){
+				var l:GameLoader = this.letras.getChildAt(i) as GameLoader;
+				if (l.tag.letra == letra && l.isVisible()){
+					trace('pego: ',letra);
+					l.visible = false;
+					count++;
+				}
+			}
+			if (count>0){
+				//animar a cero las piezas.
+				this.toZero(count);
+				Main.I.updateScore(count);
+			}
+		}
 		
 		private function complete(child:GameLoader):void {
 			trace(child);
@@ -116,12 +145,12 @@ package
 		private function start(loader:GameLoader):void {
 			
 			Tweener.addTween(loader, {
-					y:loader.box.y, 
-					x:loader.box.x, 
-					time:2 + Math.random() * 2, 
-					transition:'easeInOutCubic' , 
-					delay:1
-					} );
+				y:loader.box.y, 
+				x:loader.box.x, 
+				time:2 + Math.random() * 2, 
+				transition:'easeInOutCubic' , 
+				delay:1
+			});
 		}
 		
 		public function hide(cb:Function) {
@@ -130,13 +159,15 @@ package
 			
 			for (var i:int = 0; i < this.numChildren; i++)
 			{
-				var loader:GameLoader = this.getChildAt(i) as GameLoader;
-				Tweener.addTween(loader, {
-					y: -800 +Math.random()*2400, 
-					x: -800 + Math.random() * 2400, 
-					time:2 + Math.random() * 2, 
-					transition:'easeInOutCubic'
-					});
+				if (this.getChildAt(i) is GameLoader){
+					var loader:GameLoader = this.getChildAt(i) as GameLoader;
+					Tweener.addTween(loader, {
+						y: -800 +Math.random()*2400, 
+						x: -800 + Math.random() * 2400, 
+						time:2 + Math.random() * 2, 
+						transition:'easeInOutCubic'
+						});
+				}
 			}
 			
 			Tweener.addTween(this, {
@@ -155,23 +186,25 @@ package
 			
 			for (var i:int = 0; i < this.numChildren; i++)
 			{
-				var loader:GameLoader = this.getChildAt(i) as GameLoader;
-				
-				var x, y:Number;
-				if (i % 2 == 0) {
-					Math.random
-					x = MainTest.randomIntRange( -2700, -800); //r.integer( -2700, -800);
-					y = MainTest.randomIntRange(-800, 1800);
-				} else {
-					x = MainTest.randomIntRange(800, 1600);
-					y = MainTest.randomIntRange(-800, 1800);
-				}
-				Tweener.addTween(loader, {
-					y: y,
-					x: x, 
-					time:2 + Math.random() * 2, 
-					transition:'easeInOutCubic'
+				if (this.getChildAt(i) is GameLoader){
+					var loader:GameLoader = this.getChildAt(i) as GameLoader;
+					
+					var x, y:Number;
+					if (i % 2 == 0) {
+						Math.random
+						x = Game.randomIntRange( -2700, -800); //r.integer( -2700, -800);
+						y = Game.randomIntRange(-800, 1800);
+					} else {
+						x = Game.randomIntRange(800, 1600);
+						y = Game.randomIntRange(-800, 1800);
+					}
+					Tweener.addTween(loader, {
+						y: y,
+						x: x, 
+						time:2 + Math.random() * 2, 
+						transition:'easeInOutCubic'
 					});
+				}
 			}
 			cb();
 			if (alpha)
@@ -180,6 +213,26 @@ package
 				time:6, 
 				transition:'easeInOutCubic' 
 			});
+		}
+		public function toZero (count:int):void{
+			// 20   -->   100%
+			// 1    -->     x%
+
+			var percent:Number = count*100/this.frase.length;
+
+			var toShow:int = Math.round(this.countGraph * percent);
+
+			for (var i:int = 0; (i<this.numChildren && toShow > 0);i++){
+				if (this.getChildAt(i) is GameLoader){
+					var l:GameLoader = this.getChildAt(i) as GameLoader;
+					if (!l.tag.inZero){
+						l.tag.inZero = true;
+						toShow--;
+						this.start(l);
+					}
+				}
+			}
+
 		}
 		public static function randomIntRange(start:Number, end:Number):int
 		{
