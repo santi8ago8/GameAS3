@@ -18,9 +18,7 @@ package
 		public var tag:Object = new Object();
 
 		public function isVisible():Boolean{
-
-			return (x>0 && this.visible);
-
+			return (this.y>0 && this.visible);
 		}
 	}
 

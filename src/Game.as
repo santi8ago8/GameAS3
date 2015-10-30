@@ -1,8 +1,9 @@
-package
+﻿package
 {
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;	
 	import flash.display.Loader;
 	import flash.display.MovieClip;
 	import flash.net.URLLoader;
@@ -18,6 +19,7 @@ package
 		var letras:MovieClip;
 		var frase:String;
 		var countGraph:int;
+		var letrasArr:Array;
 		
 		public function Game(folder:String)
 		{
@@ -78,6 +80,21 @@ package
 		}
 
 		public function createLetters():String{
+
+			var str:String = Main.currentJson.description.toLowerCase();
+			letrasArr = new Array();
+			for (var i = 0;i<str.length;i++){
+				var l:String = str.charAt(i);
+				if (l!=' ' && l!=',' && l!='.'){
+					letrasArr.push({
+						pos:i,
+						letra:l,
+						color: 0xffffff
+					});
+				}
+			}
+			Main.I.setLetters(letrasArr);
+
 			var frase:String = Main.currentJson.description.toLowerCase()
 				.split(" ").join("")
 				.split(".").join("")
@@ -91,28 +108,36 @@ package
 			var tiempo:Number = Main.currentJson.time;
 			var tiempoCU:Number = tiempo/frase.length;
 			this.frase = frase;
+			
 
 			for (var i = 0;i<frase.length;i++){
 				var l:String = frase.charAt(i);
 				var url:String = 'img/abecedario/' + l + '.png';
 				var loader:GameLoader = new GameLoader();
+				
 				loader.load(new URLRequest(url));
 				loader.tag = new Object();
-				loader.tag.letra = i.toString();
+				loader.tag.letra = l;
+				loader.tag.pos = i;
 				letras.addChild(loader);
 				loader.y = -100;
 				loader.x = Game.randomIntRange(10,700);
 				Tweener.addTween(loader,{
 					y:650,
 					delay:i*tiempoCU,
-					time:Game.randomNumberRange(.5,2),
+					time:Game.randomNumberRange(.75,2),
 					transition:'easeInOutCubic',
-					onComplete:function(l:Loader){
-						l.visible = false;
+					onComplete:function(lO:GameLoader){
+						if (!lO.tag.passed){
+							letrasArr[lO.tag.pos].color = 0xFA0202;
+						}
+
+						lO.visible = false;
 					},
 					onCompleteParams:[loader]
 				});
 			}
+
 
 			this.stage.addEventListener(KeyboardEvent.KEY_DOWN,this.keydown);
 
@@ -121,13 +146,16 @@ package
 		}
 
 		private function keydown(e:KeyboardEvent):void{
-			var letra:String = String.charFromCode(e.keyCode);
+
+			var letra:String = String.fromCharCode(e.keyCode).toLowerCase();
 			var count:int=0;
-			for (var i:int = 0; i<this.letras,numChildren; i++){
+			for (var i:int = 0; i<this.letras.numChildren; i++){
 				var l:GameLoader = this.letras.getChildAt(i) as GameLoader;
 				if (l.tag.letra == letra && l.isVisible()){
-					trace('pego: ',letra);
+					//trace('pego: ',letra);
 					l.visible = false;
+					l.tag.passed = true;
+					letrasArr[l.tag.pos].color = 0x02FA0B;
 					count++;
 				}
 			}
@@ -142,14 +170,14 @@ package
 			trace(child);
 		}
 		
-		private function start(loader:GameLoader):void {
+		private function start(loader:GameLoader,delay:int=1):void {
 			
 			Tweener.addTween(loader, {
 				y:loader.box.y, 
 				x:loader.box.x, 
 				time:2 + Math.random() * 2, 
 				transition:'easeInOutCubic' , 
-				delay:1
+				delay:delay
 			});
 		}
 		
@@ -218,9 +246,10 @@ package
 			// 20   -->   100%
 			// 1    -->     x%
 
-			var percent:Number = count*100/this.frase.length;
+			var percent:Number = count*1/this.frase.length;
 
-			var toShow:int = Math.round(this.countGraph * percent);
+			var toShow:int = (this.countGraph * percent);
+			//trace(percent,toShow);
 
 			for (var i:int = 0; (i<this.numChildren && toShow > 0);i++){
 				if (this.getChildAt(i) is GameLoader){
@@ -228,7 +257,7 @@ package
 					if (!l.tag.inZero){
 						l.tag.inZero = true;
 						toShow--;
-						this.start(l);
+						this.start(l,.3);
 					}
 				}
 			}

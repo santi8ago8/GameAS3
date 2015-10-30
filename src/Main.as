@@ -3,6 +3,7 @@
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import caurina.transitions.Tweener;
 	import flash.events.TimerEvent;
@@ -24,8 +25,8 @@
 		}
 		
 		public static var currentJson:Object;
-		var menu:MainTest;
-		var game:MainTest;
+		var menu:Game;
+		var game:Game;
 		var tMenu:Timer;
 		var tGame:Timer;
 		var fraseFinal:String;
@@ -39,7 +40,7 @@
 			} catch(Ecx){}
 			
 			trace("play level1");
-			game = new MainTest("img/Lion legendary/");
+			game = new Game("img/Lion legendary/");
 			//menu.addEventListener(MouseEvent.CLICK, this.selectLevel);
 			stage.addChild(game);
 			tMenu = new Timer(5000, 1);
@@ -74,7 +75,14 @@
 			this.fraseFinal = game.createLetters();
 			Main.I.init(Main.currentJson.description, this.fraseFinal.length);
 
+			tGame = new Timer((currentJson.time+3)*1000,1);
+			tGame.addEventListener(TimerEvent.TIMER,this.endGame);
+			tGame.start();
 
+		}
+
+		private function endGame(e:TimerEvent):void{
+			trace("endGame")
 		}
 			
 		private function hideFromStage(e:Event) {
@@ -84,7 +92,7 @@
 		
 		private function init(e:Event = null):void {
 			trace("init");
-			menu = new MainTest("img/menu/");
+			menu = new Game("img/menu/");
 			menu.addEventListener(MouseEvent.CLICK, this.selectLevel);
 			stage.addChild(menu);
 		}
