@@ -168,6 +168,7 @@
 		
 		private function complete(child:GameLoader):void {
 			trace(child);
+			
 		}
 		
 		private function start(loader:GameLoader,delay:int=1):void {

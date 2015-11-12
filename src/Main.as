@@ -1,4 +1,4 @@
-﻿package 
+package 
 {
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
@@ -83,6 +83,13 @@
 
 		private function endGame(e:TimerEvent):void{
 			trace("endGame")
+
+		}
+
+		private function nextLevel(){
+			game.hideFromScene(function(){}, false);
+
+			
 		}
 			
 		private function hideFromStage(e:Event) {
