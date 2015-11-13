@@ -32,7 +32,7 @@
 			var j:int = 0;
 			if (arr){
 				for	(var i:int = 0;i<this.Frase.text.length; i++){
-					if (i==arr[j].pos){
+					if (i==arr[j].pos && j<arr.length){
 
 						var format:TextFormat = new TextFormat();
 						format.color = arr[j].color;

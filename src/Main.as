@@ -1,4 +1,4 @@
-package 
+﻿package 
 {
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
@@ -27,6 +27,7 @@ package
 		public static var currentJson:Object;
 		var menu:Game;
 		var game:Game;
+		var punt:MovieClip;
 		var tMenu:Timer;
 		var tGame:Timer;
 		var fraseFinal:String;
@@ -84,12 +85,43 @@ package
 		private function endGame(e:TimerEvent):void{
 			trace("endGame")
 
+			//crear puntaje...
+			var p:Puntaje = new Puntaje();
+			this.punt = p;
+			p.puntaje.text = game.countScore + " / " + this.fraseFinal.length;
+			p.x = 400;
+			p.y = 250;
+			stage.addChild(p);
+			p.addEventListener(MouseEvent.CLICK,this.replyGame);
+		}
+		
+		private function replyGame(e:MouseEvent):void{
+			Tweener.addTween(this.punt,{
+				alpha: 0,
+				time: 1,
+				transition: 'easeInOutCubic'
+			});
+			Tweener.addTween(I,{
+				alpha: 0,
+				time: 1,
+				transition: 'easeInOutCubic' 
+			});
+			this.punt.removeEventListener(MouseEvent.CLICK,this.endGame);
+			game.hideFromScene(function() { } , true);		
+			
+			tGame = new Timer(3000,1);
+			tGame.addEventListener(TimerEvent.TIMER,this.reloadGame);
+			tGame.start();
+		}
+		
+		private function reloadGame(e:Event):void{
+			stage.removeChild(game);
+			stage.removeChild(I);
+			this.init();
 		}
 
 		private function nextLevel(){
-			game.hideFromScene(function(){}, false);
-
-			
+			game.hideFromScene(function(){}, false);			
 		}
 			
 		private function hideFromStage(e:Event) {

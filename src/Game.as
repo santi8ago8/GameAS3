@@ -20,6 +20,7 @@
 		var frase:String;
 		var countGraph:int;
 		var letrasArr:Array;
+		public var countScore:int = 0;
 		
 		public function Game(folder:String)
 		{
@@ -163,7 +164,9 @@
 				//animar a cero las piezas.
 				this.toZero(count);
 				Main.I.updateScore(count);
+				this.countScore += count;
 			}
+			
 		}
 		
 		private function complete(child:GameLoader):void {
